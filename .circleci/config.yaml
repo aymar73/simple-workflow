@@ -15,13 +15,25 @@ jobs:
     steps:
       - run: echo world
 
+  build:
+    docker:
+      - image: cimg/base:2020.01
+    steps:
+      - run: 
+          name: "echo an env var that is part of our project"
+          command: |
+            echo $MY_ENV_VAR
+
 
 workflows:
-  # Name the workflow "welcome"
-  welcome:
+  # Name the workflow "printing"
+  printing:
     # Run the welcome/run job in its own container
     jobs:
       - print_hello
       - print_world:
           requires:
             - print_hello
+      - build
+         requires:
+            - [print_hello, print_world]
