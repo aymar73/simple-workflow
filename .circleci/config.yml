@@ -8,7 +8,6 @@ jobs:
     steps: 
       - run: echo hello
 
-jobs:
   print_world:
     docker:
       - image: circleci/node:13.8.0
@@ -35,5 +34,4 @@ workflows:
           requires:
             - print_hello
       - build
-         requires:
-            - [print_hello, print_world]
+      
