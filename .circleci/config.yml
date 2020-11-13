@@ -27,16 +27,11 @@ jobs:
 workflows:
   # Name the workflow "printing"
   printing:
-    # Run the welcome/run job in its own container
+    # Run the jobs in their own container
     jobs:
       - print_hello
       - print_world:
           requires:
             - print_hello
-<<<<<<< HEAD:.circleci/config.yml
       - build
-      
-=======
-      - build   
       - print_world
->>>>>>> cb6db18d6e7b0e3bec85ad2fa03ae35ad5bbacf3:.circleci/config.yaml
