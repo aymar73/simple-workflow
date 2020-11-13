@@ -19,7 +19,7 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - run: echo my name is $CIRCLE_USERNAME
-      - run: echo my github repository is $CIRCLE_REPOSITORY_UR
+      - run: echo my github repository is $CIRCLE_REPOSITORY_URL
 
 
   build:
