@@ -42,5 +42,6 @@ workflows:
       - print_world:
           requires:
             - print_hello
+      - print_my_name
       - build
       - print_world
