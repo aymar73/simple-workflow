@@ -45,6 +45,13 @@ jobs:
     steps:
       - print_pipeline_id
 
+  job_failure:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - run: echo return 1
+      - run: when on_fail
+
 workflows:
   # Name the workflow "printing"
   printing:
@@ -61,3 +68,4 @@ workflows:
       - my_job:
           requires:
             - print_my_name
+      - job_failure
