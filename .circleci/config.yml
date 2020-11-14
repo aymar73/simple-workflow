@@ -2,17 +2,30 @@
 version: 2.1
 
 jobs:
+
   print_hello:
     docker:
       - image: circleci/node:13.8.0
     steps: 
       - run: echo hello
 
-  print_world:
+  save_hello_world_output:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      - run: echo world
+      - run: echo "hello world" > ~/output.txt
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - output.txt
+
+  print_output_file:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: cat ~/output.txt 
 
   print_my_name:
     docker:
@@ -21,27 +34,16 @@ jobs:
       - run: echo my name is $CIRCLE_USERNAME
       - run: echo my github repository is $CIRCLE_REPOSITORY_URL
 
-
-  build:
-    docker:
-      - image: cimg/base:2020.01
-    steps:
-      - run: 
-          name: "echo an env var that is part of our project"
-          command: |
-            echo $User_name
-
-
-
 workflows:
   # Name the workflow "printing"
   printing:
     # Run the jobs in their own container
     jobs:
       - print_hello
-      - print_world:
+      - save_hello_world_output
+      - print_output_file:
           requires:
-            - print_hello
-      - print_my_name
-      - build
-      - print_world
+            - save_hello_world_output
+      - print_my_name:
+          requires:
+            - print_output_file
