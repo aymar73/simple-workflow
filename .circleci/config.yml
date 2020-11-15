@@ -4,6 +4,7 @@ version: 2.1
 commands: # reusable job code
   print_pipeline_id:
     steps:
+      - checkout
       - run: echo ${CIRCLE_WORKFLOW_ID}
 
 jobs:
@@ -11,13 +12,15 @@ jobs:
   print_hello:
     docker:
       - image: circleci/node:13.8.0
-    steps: 
+    steps:
+      - checkout 
       - run: echo hello
 
   save_hello_world_output:
     docker:
       - image: circleci/node:13.8.0
     steps:
+      - checkout
       - run: echo "hello world" > ~/output.txt
       - persist_to_workspace:
           root: ~/
@@ -28,6 +31,7 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
+      checkout
       - attach_workspace:
           at: ~/
       - run: cat ~/output.txt 
@@ -36,6 +40,7 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
+      - checkout
       - run: echo my name is $CIRCLE_USERNAME
       - run: echo my github repository is $CIRCLE_REPOSITORY_URL
 
@@ -43,17 +48,18 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
+      - checkout
       - print_pipeline_id
 
-  job_failure:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - run: return 1
-      - run:
-          name: on error
-          command: echo "Hello Error!"
-          when: on_fail
+#job_failure:
+    #docker:
+      #- image: circleci/node:13.8.0
+    #steps:
+        #- run: return 1
+        #- run:
+              #name: on error
+          #command: echo "Hello Error!"
+          # when: on_fail
 
 workflows:
   # Name the workflow "printing"
@@ -71,4 +77,4 @@ workflows:
       - my_job:
           requires:
             - print_my_name
-      - job_failure
+      #- job_failure
