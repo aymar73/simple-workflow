@@ -61,6 +61,15 @@ jobs:
           #command: echo "Hello Error!"
           # when: on_fail
 
+create_infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Ensure backend infrastructure exist
+          command: |
+            aws cloudformation deploy --template-file template.yml --stack-name my-stack
 workflows:
   # Name the workflow "printing"
   printing:
@@ -77,4 +86,6 @@ workflows:
       - my_job:
           requires:
             - print_my_name
-      #- job_failure
+      - create_infrastructure:
+          requires:
+            - my_job
